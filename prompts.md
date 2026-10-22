@@ -170,3 +170,19 @@ After building, verify every page load without errors, and commit with the messa
 
 **My review:**
 _(to be filled in by me)_
+
+### 6. Write README.md and push to GitHub
+**Prompt:**
+Update the README.md and push it to GItHUB
+
+**Output summary:**
+- README.md was empty; wrote a full project README covering purpose/audience, the 6-page structure, project layout (app.py / app_v1_tabs.py / src/ / views/), the dataset, the model (R²≈0.81, MAE≈$4,177), and how to run it with `uv`.
+- Confirmed the repo already tracks `origin/main` on GitHub (`GunaShekarReddy/insurance-analytics-dashboard`) and was in sync at `df6f578` before this change.
+- Committed and pushed the README update to `origin/main`.
+
+**Files created/changed:**
+- README.md (written)
+- prompts.md (modified)
+
+**My review:**
+_(to be filled in by me)_
