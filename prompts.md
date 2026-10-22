@@ -72,3 +72,29 @@ Any preference on currency/number formatting (e.g. $13,279 vs 13279.12) across K
 
 **My review:**
 _(to be filled in by me)_
+
+### 3. Freeze v1 before restructuring
+**Prompt:**
+Task: Freeze the current single-page tab dashboard as version 1 before we restructure it.
+Steps:
+1.	Show me `git status` so I can confirm which files will be committed. Make sure .venv is not included.
+2.	Commit all project files with the message: "v1: single-page dashboard with tabs"
+3.	Create a git tag: v1-tabs
+4.	Copy app.py to app_v1_tabs.py and commit it with the message: "Add frozen v1 snapshot for comparison"
+Rules:
+-	app_v1_tabs.py is a frozen snapshot. Never modify it in later tasks.
+-	Do not change any other files in this task.
+Output: Confirm the commit hashes, the tag, and that `uv run streamlit run app_v1_tabs.py starts without errors.
+
+**Output summary:**
+- Showed `git status`, confirmed `.venv` was excluded; flagged that `.DS_Store` was also untracked and would be swept into the commit, and asked whether to gitignore it or commit it as-is — you chose to gitignore it, so added a `.DS_Store` entry to `.gitignore` before committing.
+- Committed all project files as `cee1dcd` ("v1: single-page dashboard with tabs"), tagged it `v1-tabs`, then copied `app.py` to `app_v1_tabs.py` and committed it as `ef1f91e` ("Add frozen v1 snapshot for comparison").
+- Verified `uv run streamlit run app_v1_tabs.py` starts without errors (health check passed, no exceptions in an in-process run) before reporting done.
+- Per your "don't change any other files in this task" rule, initially skipped logging this task to prompts.md and told you so, rather than logging without asking.
+
+**Files created/changed:**
+- .gitignore (added .DS_Store entry)
+- app_v1_tabs.py (created, frozen snapshot)
+
+**My review:**
+_(to be filled in by me)_

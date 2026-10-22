@@ -55,3 +55,4 @@ Rules:
 - Never fill in or edit the "My review" lines. Those are mine.
 - Never rewrite or delete earlier entries; only append.
 - Do not log purely conversational questions, only task prompts.
+- Updating prompts.md is always allowed, even when a task says not to change other files.
