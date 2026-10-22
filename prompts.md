@@ -98,3 +98,75 @@ Output: Confirm the commit hashes, the tag, and that `uv run streamlit run app_v
 
 **My review:**
 _(to be filled in by me)_
+
+### 4. Log v1 freeze and clarify prompt-log rule
+**Prompt:**
+Two small follow-ups:
+1. Log the v1 freeze task in prompts.md as the next entry, following the CLAUDE.md format. Mention in the output summary that you asked me about .DS_Store and skipped logging at first because of my "don't change other files" rule.
+2. Update the Prompt log rules in CLAUDE.md by adding this line: "- Updating prompts.md is always allowed, even when a task says not to change other files."
+Then run git status. If .gitignore has uncommitted changes, include it in the commit. Commit with the message: "Log v1 freeze and clarify prompt-log rule" Do not move the v1-tabs tag.
+
+**Output summary:**
+- Appended entry #3 to prompts.md logging the v1 freeze task, including the note about the .DS_Store question and the initial skip.
+- Added the new rule line to CLAUDE.md's Prompt log section.
+- Ran `git status`; `.gitignore` had no uncommitted changes (its .DS_Store entry was already part of the v1 commit), so only CLAUDE.md and prompts.md were staged and committed as `f17ea11` ("Log v1 freeze and clarify prompt-log rule"); confirmed the `v1-tabs` tag stayed on `cee1dcd`, unmoved.
+- Note: this entry itself was logged late (during the next task) — the follow-up task prompt wasn't given its own entry at the time, only the freeze task it asked to log was.
+
+**Files created/changed:**
+- CLAUDE.md (added prompt-log rule)
+- prompts.md (modified)
+
+**My review:**
+_(to be filled in by me)_
+
+### 5. Restructure into a multi-page storytelling app
+**Prompt:**
+Task
+Restructure app.py from tabs into a multi-page storytelling app using st.navigation
+and st.Page. Keep all business logic in src/; only the UI layer changes.
+Page order
+1. Overview: purpose of the dashboard, audience (care management and finance),
+   the business questions it answers, and how to use the filters
+2. Data Quality: "Can we trust this data?" (always the full dataset, no filters)
+3. Who are our members?: univariate EDA from my notebook: histogram + box plot for a
+   selected numeric column (age, bmi, children, charges), count plots for sex, smoker, region
+4. What drives medical costs?: the current Cost Drivers content
+5. Who is high risk?: the current High-Risk Members content with CSV export
+6. What will a member cost?: the current Cost Estimator (model trained on the full dataset)
+Requirements
+- Pages 3–6 follow the same structure: the business question as the title,
+  key metrics, charts, then a short-written insight and a "So what" line
+- Insights must be computed from the filtered data at runtime, never hardcoded
+- Sidebar filters persist across pages using st.session_state
+- The KPI row appears on pages 3–6
+- Rename "Estimated Annual Charges" to "Estimated Charges": the dataset doesn't
+  specify a time period, so don't describe charges as annual anywhere
+- Do not modify app_v1_tabs.py; it is a frozen snapshot of version 1
+Output
+Before writing code, list the files you will create or change and wait for my approval.
+After building, verify every page load without errors, and commit with the message
+"v2: multi-page storytelling dashboard".
+
+**Output summary:**
+- Proposed the file plan (new `src/insights.py` and `views/` package; changed `app.py` and `src/charts.py`) and waited for approval before writing any code.
+- Added two new chart builders to `src/charts.py` (`distribution_boxplot`, `count_plot`) and a new `src/insights.py` module with one function per page-3–6 insight, each computed at runtime from the filtered/flagged DataFrame (smoker cost ratio, dominant risk factor, skew check, predicted-vs-average gap), with guards for edge cases like a filter that leaves only one smoker group.
+- Rebuilt `app.py` as a thin multi-page entrypoint (`st.navigation` + `st.Page`, explicit `url_path`s to avoid a callable-name collision) and added a `views/` package with one UI module per page plus shared `views/components.py` (sidebar filters, KPI row, insight renderer) — all business logic stays in `src/`.
+- Renamed "Estimated Annual Charges" to "Estimated Charges" and confirmed no other "annual" wording exists outside the frozen `app_v1_tabs.py`.
+- Verified all 6 pages load with no exceptions via Streamlit's `AppTest` harness (driving `st.navigation` by its internal page hash, since `switch_page` only supports file-based pages, not pure callables), confirmed sidebar filters persist across page switches (e.g. a Smoker-only filter stayed applied on every page), and confirmed `app_v1_tabs.py` has zero diff from its committed version.
+
+**Files created/changed:**
+- app.py (rewritten as multi-page entrypoint)
+- src/charts.py (added distribution_boxplot, count_plot)
+- src/insights.py (created)
+- views/__init__.py (created)
+- views/components.py (created)
+- views/overview.py (created)
+- views/data_quality.py (created)
+- views/members.py (created)
+- views/cost_drivers.py (created)
+- views/high_risk.py (created)
+- views/cost_estimator.py (created)
+- prompts.md (modified)
+
+**My review:**
+_(to be filled in by me)_

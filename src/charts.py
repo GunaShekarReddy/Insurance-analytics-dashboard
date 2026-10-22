@@ -39,6 +39,29 @@ def boxplot(df: pd.DataFrame, group_col: str, value_col: str = "charges") -> go.
     return fig
 
 
+def distribution_boxplot(df: pd.DataFrame, col: str) -> go.Figure:
+    fig = px.box(df, y=col, color_discrete_sequence=[BLUE])
+    fig.update_layout(title=f"Boxplot of {col}")
+    return fig
+
+
+def count_plot(df: pd.DataFrame, col: str) -> go.Figure:
+    counts = df[col].value_counts().reset_index()
+    counts.columns = [col, "count"]
+    category_orders = {col: REGION_ORDER} if col == "region" else None
+    fig = px.bar(
+        counts,
+        x=col,
+        y="count",
+        color=col,
+        category_orders=category_orders,
+        color_discrete_map=GROUP_COLOR_MAPS.get(col),
+        text_auto=True,
+    )
+    fig.update_layout(title=f"Count of {col}", showlegend=False)
+    return fig
+
+
 def scatter_vs_charges(
     df: pd.DataFrame, x_col: str, color_col: str = "smoker"
 ) -> go.Figure:
@@ -144,6 +167,8 @@ if __name__ == "__main__":
     figs = {
         "histogram": histogram(clean, "charges"),
         "boxplot_smoker": boxplot(clean, "smoker"),
+        "distribution_boxplot": distribution_boxplot(clean, "bmi"),
+        "count_plot_region": count_plot(clean, "region"),
         "scatter_age": scatter_vs_charges(clean, "age"),
         "correlation_heatmap": correlation_heatmap(encode_features(clean)),
         "risk_breakdown": risk_factor_breakdown(flag_high_risk(clean), "region"),
